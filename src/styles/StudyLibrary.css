@@ -1,0 +1,158 @@
+/* Study Library Styles */
+@import "./variables.css";
+
+.library-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  background-color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.library-view h1 {
+  color: var(--primary);
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Action Sections */
+.library-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Common Button Styles for Actions */
+.create-button {
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: var(--primary);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.create-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+/* Empty State Messages */
+.no-sets {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+/* Lists and Cards */
+.study-sets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.study-set-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: var(--radius-default);
+  background-color: var(--primary-lightest);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+  border: 1px solid rgb(148, 147, 162);
+}
+
+.study-set-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.study-set-info {
+  margin-bottom: 1.2rem;
+}
+
+.study-set-info h3 {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.description {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Progress Bars */
+.progress-container {
+  position: relative;
+  height: 24px;
+  background-color: var(--primary-lighter);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--primary-light);
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Card Actions */
+.study-set-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.study-set-actions button {
+  padding: 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: var(--primary-lighter);
+  color: var(--primary);
+  flex: 1;
+  border-radius: var(--radius-md);
+}
+
+.study-set-actions button:hover {
+  background-color: var(--primary-light);
+}
+
+.study-set-actions .delete-button {
+  background-color: var(--error-light);
+  color: var(--error);
+}
+
+.study-set-actions .delete-button:hover {
+  background-color: #ffcdd2;
+}

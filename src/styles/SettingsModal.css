@@ -1,0 +1,136 @@
+/* Toggle Switch Styles */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--primary);
+}
+
+input:focus + .toggle-slider {
+  box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Checkbox Styles */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.dark-mode-checkbox {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+/* Settings Modal Styles */
+.settings-modal {
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+}
+
+/* Tabs Navigation */
+.settings-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.settings-tabs button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text);
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.settings-tabs button.active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+.settings-tabs button:hover:not(.active) {
+  background-color: var(--surface-variant);
+}
+
+/* General Settings */
+.general-settings {
+  padding: 10px;
+}
+
+.general-settings h3 {
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+.settings-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-option label {
+  font-weight: 500;
+  margin-right: 10px;
+  color: var(--text);
+}
+
+/* Dark mode styles for the settings modal */
+body.dark-mode .settings-option {
+  border-bottom-color: #555;
+}
+
+body.dark-mode .dark-mode-checkbox {
+  accent-color: #4a56e2;
+}
+
+/* Modal sizing for the settings */
+.settings-modal .modal-body {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0 20px;
+}

@@ -1,0 +1,35 @@
+/* Global Variables */
+:root {
+  /* Colors */
+  --primary: #4a56e2;
+  --primary-hover: #3a46d2;
+  --primary-light: #7599f4;
+  --primary-lighter: #cfd9f6;
+  --primary-lightest: #f8f9fe;
+  --primary-dark: #3a46d2;
+  --surface: white;
+  --text: #333;
+  --text-muted: #666;
+  --text-light: #888;
+  --success: #2ecc71;
+  --success-light: #e8f5e9;
+  --success-dark: #0eba50;
+  --error: #e74c3c;
+  --error-light: #ffebee;
+  --border: #e0e0e0;
+  --border-light: #e0e0e0;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-default: 8px;
+  --radius-lg: 12px;
+  --radius-round: 50px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 15px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 15px 40px rgba(0, 0, 0, 0.2);
+  --shadow-primary: 0 5px 15px rgba(74, 86, 226, 0.3);
+}

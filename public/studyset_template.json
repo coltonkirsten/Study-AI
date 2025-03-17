@@ -1,0 +1,19 @@
+{
+  "name": "Your Study Set Name",
+  "description": "A description of your study set",
+  "questions": [
+    {
+      "id": 1,
+      "type": "freeResponse",
+      "question": "Your free response question here?",
+      "answer": "The answer to your question"
+    },
+    {
+      "id": 2,
+      "type": "multipleChoice",
+      "question": "Your multiple choice question here?",
+      "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+      "correctAnswer": "Option 2"
+    }
+  ]
+}

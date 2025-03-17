@@ -1,0 +1,335 @@
+/* Study Buddy Styles - Combined StudyView and ResultView */
+@import "./variables.css";
+
+/* Study View Styles */
+.study-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.question-card-container {
+  width: 100%;
+  max-width: 600px;
+  min-width: 320px;
+  margin: 3rem auto;
+  transition: all 0.4s ease-out;
+}
+
+/* When AI chat is open, adjust the question card position */
+.ai-chat-open .question-card-container {
+  transform: translateX(-1%);
+  max-width: 500px;
+  min-width: 320px;
+  margin-right: auto;
+  margin-left: 5%;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1024px) {
+  .ai-chat-open .question-card-container {
+    transform: translateX(-25%);
+  }
+}
+
+@media (max-width: 768px) {
+  .ai-chat-open .question-card-container {
+    transform: translateX(-15%);
+    margin-left: 2%;
+  }
+}
+
+/* Phone screens - don't move question card */
+@media (max-width: 576px) {
+  .ai-chat-open .question-card-container {
+    transform: none;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 90%;
+  }
+}
+
+.question-card-main {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  background-color: white;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgb(148, 147, 162);
+}
+
+.question {
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.free-response textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-default);
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.free-response textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.multiple-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.option {
+  padding: 1rem;
+  border-radius: var(--radius-default);
+  background-color: var(--bg-light);
+  border: 2px solid var(--border-light);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.option:hover {
+  border-color: var(--primary-light);
+  background-color: var(--primary-lightest);
+}
+
+.option.selected {
+  border-color: var(--primary);
+  background-color: var(--primary-lightest);
+}
+
+.option .checkbox,
+.option .radio {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.instruction {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.answer-list {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.answer-list.correct li {
+  color: var(--success);
+}
+
+.answer-list .no-selection {
+  color: var(--danger);
+  font-style: italic;
+}
+
+/* Result View Styles */
+.result-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.result-content {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  background-color: white;
+  box-shadow: var(--shadow-lg);
+  margin-top: 1rem;
+  border: 1px solid rgb(148, 147, 162);
+}
+
+.result-view h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.correct h2 {
+  color: var(--success);
+}
+
+.incorrect h2 {
+  color: var(--error);
+}
+
+.neutral h2 {
+  color: var(--primary);
+}
+
+.answer-section {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.answer-section h3 {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.answer-section p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Buttons - Consolidated */
+.buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Override any general button styles with more specific selectors */
+.study-view .submit-button,
+.study-view .cancel-button,
+.study-view .generate-button,
+.study-view .study-again-button,
+.study-view .got-it-button,
+.result-view .submit-button,
+.result-view .cancel-button,
+.result-view .generate-button,
+.result-view .study-again-button,
+.result-view .got-it-button {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.submit-button,
+.cancel-button,
+.generate-button,
+.study-again-button,
+.got-it-button {
+  /* Keep existing general styles as fallback */
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-default);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.submit-button:disabled {
+  background-color: var(--border-light);
+  cursor: not-allowed;
+}
+
+.study-view .submit-button:hover,
+.result-view .submit-button:hover,
+.submit-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-button {
+  background-color: #f0f0f0;
+  color: var(--text-muted);
+}
+
+.study-view .cancel-button:hover,
+.result-view .cancel-button:hover,
+.cancel-button:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.study-again-button,
+.got-it-button {
+  flex: 1;
+}
+
+.study-again-button {
+  background-color: var(--primary-lighter);
+  color: var(--primary-dark);
+}
+
+.study-view .study-again-button:hover,
+.result-view .study-again-button:hover,
+.study-again-button:hover {
+  background-color: var(--primary-lighter);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.got-it-button {
+  background-color: var(--success-dark);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.study-view .got-it-button:hover,
+.result-view .got-it-button:hover,
+.got-it-button:hover {
+  background-color: var(--success);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.generate-button {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.study-view .generate-button:hover,
+.result-view .generate-button:hover,
+.generate-button:hover {
+  background-color: var(--primary-lighter);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

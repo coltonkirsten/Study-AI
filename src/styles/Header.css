@@ -1,0 +1,38 @@
+/* Header Styles */
+@import "./variables.css";
+
+.app-header {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.app-title {
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin: 0;
+}
+
+.nav-button {
+  position: absolute;
+  left: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--primary);
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-button:hover {
+  background-color: var(--primary-light);
+}

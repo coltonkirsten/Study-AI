@@ -1,0 +1,33 @@
+/* App Styles */
+@import "./variables.css";
+@import "./global.css";
+@import "./common.css";
+@import "./Header.css";
+@import "./TopMenuBar.css";
+@import "./Modal.css";
+@import "./AiChatModal.css";
+@import "./StudyLibrary.css";
+@import "./BrowseView.css";
+@import "./CreateStudySetModal.css";
+@import "./study.css";
+
+.App {
+  background-color: var(--background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  position: relative;
+  align-items: center;
+}
+
+/* Common Containers */
+.modal-content,
+.ai-chat-modal,
+.library-view,
+.study-view,
+.result-view,
+.browse-view {
+  background-color: var(--surface);
+  color: var(--text);
+}

@@ -1,0 +1,103 @@
+/* Create Study Set Modal Styles */
+@import "./variables.css";
+@import "./Modal.css";
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.content-selection {
+  margin-bottom: 1.5rem;
+}
+
+.selection-tabs {
+  display: flex;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-button {
+  padding: 0.8rem 1.2rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-button.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-button:hover:not(.active) {
+  color: var(--text-muted);
+}
+
+/* Form Info Elements */
+.file-info,
+.error-message,
+.progress-message {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-default);
+  font-size: 0.9rem;
+}
+
+.file-info {
+  background-color: #f0f7ff;
+}
+
+.file-note {
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.error-message {
+  background-color: var(--error-light);
+  color: var(--error);
+}
+
+.progress-message {
+  background-color: var(--success-light);
+  color: var(--success);
+  text-align: center;
+}
+
+.success-indicator {
+  color: var(--success);
+  font-weight: bold;
+}
+
+.error-indicator {
+  color: var(--error);
+  font-weight: bold;
+}
+
+.content-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-default);
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.content-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}

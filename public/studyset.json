@@ -1,0 +1,48 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "type": "freeResponse",
+      "question": "What is the capital of France?",
+      "answer": "Paris"
+    },
+    {
+      "id": 2,
+      "type": "freeResponse",
+      "question": "What is the powerhouse of the cell?",
+      "answer": "Mitochondria"
+    },
+    {
+      "id": 3,
+      "type": "multipleChoice",
+      "question": "Which planet is known as the Red Planet?",
+      "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+      "correctAnswer": "Mars"
+    },
+    {
+      "id": 4,
+      "type": "multipleChoice",
+      "question": "Who wrote 'Romeo and Juliet'?",
+      "options": [
+        "Charles Dickens",
+        "Mark Twain",
+        "William Shakespeare",
+        "Jane Austen"
+      ],
+      "correctAnswer": "William Shakespeare"
+    },
+    {
+      "id": 5,
+      "type": "freeResponse",
+      "question": "What is the largest mammal on Earth?",
+      "answer": "Blue Whale"
+    },
+    {
+      "id": 6,
+      "type": "multipleChoice",
+      "question": "What element has the chemical symbol 'O'?",
+      "options": ["Osmium", "Oxygen", "Oganesson", "Olivine"],
+      "correctAnswer": "Oxygen"
+    }
+  ]
+}
