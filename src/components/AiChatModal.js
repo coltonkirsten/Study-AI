@@ -65,108 +65,6 @@ const AiChatModal = ({
     dangerouslyAllowBrowser: true,
   });
 
-  // Scroll to bottom of messages when messages change
-  useEffect(() => {
-    scrollToBottom();
-
-    // Save messages to localStorage whenever they change
-    if (allMessages.length > 0) {
-      const questionId = currentQuestion?.id || "default";
-      const mode = isInFeedbackMode ? "feedback" : "chat";
-
-      // Debounce the localStorage updates to avoid performance issues
-      // Only save when there are actual messages (not just streaming placeholders)
-      const hasCompletedMessages = allMessages.some((msg) => !msg.isStreaming);
-
-      if (hasCompletedMessages) {
-        saveMessagesToStorage(questionId, allMessages, mode, sessionId);
-      }
-    }
-  }, [allMessages, currentQuestion?.id, isInFeedbackMode, sessionId]);
-
-  // Reset conversation when the question, mode, or session changes
-  useEffect(() => {
-    const currentQuestionId = currentQuestion?.id || "default";
-    const currentMode = isInFeedbackMode ? "feedback" : "chat";
-
-    // If the question, mode, or session has changed, load the appropriate conversation or start a new one
-    if (
-      currentQuestionId !== questionIdRef.current ||
-      currentMode !== modeRef.current ||
-      sessionId !== sessionIdRef.current
-    ) {
-      questionIdRef.current = currentQuestionId;
-      modeRef.current = currentMode;
-      sessionIdRef.current = sessionId;
-
-      // Try to load existing conversation for this question, mode, and session
-      const storageKey = `chat_messages_${currentQuestionId}_${currentMode}_${sessionId}`;
-      const storedMessages = localStorage.getItem(storageKey);
-
-      if (storedMessages) {
-        // If we have a stored conversation, load it
-        setAllMessages(JSON.parse(storedMessages));
-        hasInitializedConversation.current = true;
-      } else {
-        // If no existing conversation, reset to start a new one
-        setAllMessages([]);
-        hasInitializedConversation.current = false;
-      }
-    }
-
-    // Reset typing state when modal opens or closes
-    if (!isOpen) {
-      setIsTyping(false);
-      pendingRequestRef.current = false;
-    }
-  }, [isOpen, currentQuestion, isInFeedbackMode, sessionId]);
-
-  // When modal opens, ensure we have the latest messages loaded
-  useEffect(() => {
-    if (isOpen) {
-      const currentQuestionId = currentQuestion?.id || "default";
-      const currentMode = isInFeedbackMode ? "feedback" : "chat";
-      const storageKey = `chat_messages_${currentQuestionId}_${currentMode}_${sessionId}`;
-      const storedMessages = localStorage.getItem(storageKey);
-
-      if (storedMessages) {
-        const parsedMessages = JSON.parse(storedMessages);
-        // Only update if the messages are different to avoid unnecessary renders
-        if (JSON.stringify(parsedMessages) !== JSON.stringify(allMessages)) {
-          setAllMessages(parsedMessages);
-          hasInitializedConversation.current = true;
-        }
-      }
-    }
-  }, [isOpen, allMessages, isInFeedbackMode, sessionId]);
-
-  // Initialize conversation when needed
-  useEffect(() => {
-    if (
-      isOpen &&
-      !hasInitializedConversation.current &&
-      !pendingRequestRef.current &&
-      allMessages.length === 0
-    ) {
-      if (isInFeedbackMode) {
-        generateFeedbackResponse();
-      } else {
-        generateInitialResponse();
-      }
-      hasInitializedConversation.current = true;
-    }
-  }, [
-    isOpen,
-    allMessages.length,
-    isInFeedbackMode,
-    generateFeedbackResponse,
-    generateInitialResponse,
-  ]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   // Generate feedback on user's answer
   const generateFeedbackResponse = async () => {
     if (pendingRequestRef.current) return;
@@ -473,6 +371,108 @@ const AiChatModal = ({
         focusInput();
       }, 100);
     }
+  };
+
+  // Scroll to bottom of messages when messages change
+  useEffect(() => {
+    scrollToBottom();
+
+    // Save messages to localStorage whenever they change
+    if (allMessages.length > 0) {
+      const questionId = currentQuestion?.id || "default";
+      const mode = isInFeedbackMode ? "feedback" : "chat";
+
+      // Debounce the localStorage updates to avoid performance issues
+      // Only save when there are actual messages (not just streaming placeholders)
+      const hasCompletedMessages = allMessages.some((msg) => !msg.isStreaming);
+
+      if (hasCompletedMessages) {
+        saveMessagesToStorage(questionId, allMessages, mode, sessionId);
+      }
+    }
+  }, [allMessages, currentQuestion?.id, isInFeedbackMode, sessionId]);
+
+  // Reset conversation when the question, mode, or session changes
+  useEffect(() => {
+    const currentQuestionId = currentQuestion?.id || "default";
+    const currentMode = isInFeedbackMode ? "feedback" : "chat";
+
+    // If the question, mode, or session has changed, load the appropriate conversation or start a new one
+    if (
+      currentQuestionId !== questionIdRef.current ||
+      currentMode !== modeRef.current ||
+      sessionId !== sessionIdRef.current
+    ) {
+      questionIdRef.current = currentQuestionId;
+      modeRef.current = currentMode;
+      sessionIdRef.current = sessionId;
+
+      // Try to load existing conversation for this question, mode, and session
+      const storageKey = `chat_messages_${currentQuestionId}_${currentMode}_${sessionId}`;
+      const storedMessages = localStorage.getItem(storageKey);
+
+      if (storedMessages) {
+        // If we have a stored conversation, load it
+        setAllMessages(JSON.parse(storedMessages));
+        hasInitializedConversation.current = true;
+      } else {
+        // If no existing conversation, reset to start a new one
+        setAllMessages([]);
+        hasInitializedConversation.current = false;
+      }
+    }
+
+    // Reset typing state when modal opens or closes
+    if (!isOpen) {
+      setIsTyping(false);
+      pendingRequestRef.current = false;
+    }
+  }, [isOpen, currentQuestion, isInFeedbackMode, sessionId]);
+
+  // When modal opens, ensure we have the latest messages loaded
+  useEffect(() => {
+    if (isOpen) {
+      const currentQuestionId = currentQuestion?.id || "default";
+      const currentMode = isInFeedbackMode ? "feedback" : "chat";
+      const storageKey = `chat_messages_${currentQuestionId}_${currentMode}_${sessionId}`;
+      const storedMessages = localStorage.getItem(storageKey);
+
+      if (storedMessages) {
+        const parsedMessages = JSON.parse(storedMessages);
+        // Only update if the messages are different to avoid unnecessary renders
+        if (JSON.stringify(parsedMessages) !== JSON.stringify(allMessages)) {
+          setAllMessages(parsedMessages);
+          hasInitializedConversation.current = true;
+        }
+      }
+    }
+  }, [isOpen, allMessages, isInFeedbackMode, sessionId]);
+
+  // Initialize conversation when needed
+  useEffect(() => {
+    if (
+      isOpen &&
+      !hasInitializedConversation.current &&
+      !pendingRequestRef.current &&
+      allMessages.length === 0
+    ) {
+      if (isInFeedbackMode) {
+        generateFeedbackResponse();
+      } else {
+        generateInitialResponse();
+      }
+      hasInitializedConversation.current = true;
+    }
+  }, [
+    isOpen,
+    allMessages.length,
+    isInFeedbackMode,
+    generateFeedbackResponse,
+    generateInitialResponse,
+  ]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Handle user message and AI response
