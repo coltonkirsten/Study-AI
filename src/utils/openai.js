@@ -21,7 +21,7 @@ const MultipleChoiceQuestion = z.object({
   type: z.literal("multipleChoice"),
   question: z.string(),
   options: z.array(z.string()).min(2).max(6),
-  correctAnswer: z.string(),
+  correctAnswer: z.union([z.string(), z.array(z.string())]),
 });
 
 // Define the union type for questions
