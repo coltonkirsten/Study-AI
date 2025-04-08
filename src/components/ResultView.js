@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
 import TopMenuBar from "./TopMenuBar";
 import AiChatModal from "./AiChatModal";
 import "../styles/study.css";
@@ -28,7 +27,7 @@ const ResultView = ({
     if (currentQuestion) {
       setSessionId(uuidv4());
     }
-  }, [currentQuestion?.id]);
+  }, [currentQuestion]);
 
   const studySetName = activeStudySet ? activeStudySet.name : "";
 

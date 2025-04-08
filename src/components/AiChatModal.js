@@ -155,7 +155,13 @@ const AiChatModal = ({
       }
       hasInitializedConversation.current = true;
     }
-  }, [isOpen, allMessages.length, isInFeedbackMode]);
+  }, [
+    isOpen,
+    allMessages.length,
+    isInFeedbackMode,
+    generateFeedbackResponse,
+    generateInitialResponse,
+  ]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -677,6 +683,24 @@ const AiChatModal = ({
       }, 100);
     }
   }, [isOpen, isTyping]);
+
+  // Fix unsafe loop references by creating a new variable for each iteration
+  const handleStreamingResponse = (responseText, messageId) => {
+    setAllMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.id === messageId
+          ? { ...msg, content: responseText, isStreaming: true }
+          : msg
+      )
+    );
+  };
+
+  // Add missing dependency to useEffect
+  useEffect(() => {
+    if (isOpen) {
+      focusInput();
+    }
+  }, [isOpen, focusInput]);
 
   if (!isOpen) return null;
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
 import TopMenuBar from "./TopMenuBar";
 import AiChatModal from "./AiChatModal";
 import "../styles/study.css";
@@ -29,7 +28,7 @@ const StudyView = ({
     if (currentQuestion) {
       setSessionId(uuidv4());
     }
-  }, [currentQuestion?.id]);
+  }, [currentQuestion]);
 
   if (!currentQuestion) return <div>Loading...</div>;
 
