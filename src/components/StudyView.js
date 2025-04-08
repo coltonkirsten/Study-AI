@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
-import TopMenuBar from "./TopMenuBar";
 import AiChatModal from "./AiChatModal";
 import "../styles/study.css";
 import { v4 as uuidv4 } from "uuid";
 
 const StudyView = ({
-  currentQuestion,
+  question,
   userAnswer,
-  setUserAnswer,
+  onAnswer,
   selectedOption,
-  setSelectedOption,
-  selectedOptions,
-  setSelectedOptions,
-  checkAnswer,
-  goBack,
-  activeStudySet,
+  onSelectOption = () => {},
+  selectedOptions = [],
+  onSelectOptions = () => {},
+  onCheckAnswer,
 }) => {
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
 
@@ -25,56 +22,62 @@ const StudyView = ({
 
   // Reset the session ID whenever the question changes
   useEffect(() => {
-    if (currentQuestion) {
+    if (question) {
       setSessionId(uuidv4());
     }
-  }, [currentQuestion]);
+  }, [question]);
 
-  if (!currentQuestion) return <div>Loading...</div>;
+  // Listen for global AI chat events
+  useEffect(() => {
+    const handleAiChatEvent = () => {
+      setIsAiChatOpen(true);
+    };
 
-  const studySetName = activeStudySet ? activeStudySet.name : "";
+    window.addEventListener("openAiChat", handleAiChatEvent);
 
-  const handleAskAI = () => {
-    setIsAiChatOpen(true);
-  };
+    // Cleanup
+    return () => {
+      window.removeEventListener("openAiChat", handleAiChatEvent);
+    };
+  }, []);
+
+  if (!question) return <div>Loading...</div>;
 
   // Check if the question allows multiple answers
-  const isMultiSelect = Array.isArray(currentQuestion.correctAnswer);
+  const isMultiSelect = Array.isArray(question.correctAnswer);
 
   // Handle option click for multi-select questions
   const handleMultiSelectOptionClick = (option) => {
     if (selectedOptions.includes(option)) {
       // If already selected, remove it
-      setSelectedOptions(selectedOptions.filter((item) => item !== option));
+      onSelectOptions(selectedOptions.filter((item) => item !== option));
     } else {
       // If not selected, add it
-      setSelectedOptions([...selectedOptions, option]);
+      onSelectOptions([...selectedOptions, option]);
     }
   };
 
   return (
     <div className={`study-view ${isAiChatOpen ? "ai-chat-open" : ""}`}>
-      <TopMenuBar title={studySetName} goBack={goBack} onAskAI={handleAskAI} />
-
       <div className="question-card-container">
         <div className="question-card-main">
-          <p className="question">{currentQuestion.question}</p>
+          <p className="question">{question.question}</p>
 
           {isMultiSelect && (
             <p className="instruction">Select all that apply</p>
           )}
 
-          {currentQuestion.type === "freeResponse" ? (
+          {question.type === "freeResponse" ? (
             <div className="free-response">
               <textarea
                 placeholder="Type your answer here..."
                 value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
+                onChange={(e) => onAnswer(e.target.value)}
               />
             </div>
           ) : (
             <div className="multiple-choice">
-              {currentQuestion.options.map((option, index) => (
+              {question.options.map((option, index) => (
                 <div
                   key={index}
                   className={`option ${
@@ -83,13 +86,13 @@ const StudyView = ({
                         ? "selected"
                         : ""
                       : selectedOption === option
-                      ? "selected"
-                      : ""
+                        ? "selected"
+                        : ""
                   }`}
                   onClick={() =>
                     isMultiSelect
                       ? handleMultiSelectOptionClick(option)
-                      : setSelectedOption(option)
+                      : onSelectOption(option)
                   }
                 >
                   {isMultiSelect ? (
@@ -109,13 +112,13 @@ const StudyView = ({
 
           <button
             className="submit-button"
-            onClick={checkAnswer}
+            onClick={onCheckAnswer}
             disabled={
-              currentQuestion.type === "freeResponse"
+              question.type === "freeResponse"
                 ? !userAnswer.trim()
                 : isMultiSelect
-                ? selectedOptions.length === 0
-                : !selectedOption
+                  ? selectedOptions.length === 0
+                  : !selectedOption
             }
           >
             Submit Answer
@@ -127,7 +130,7 @@ const StudyView = ({
         <AiChatModal
           isOpen={isAiChatOpen}
           onClose={() => setIsAiChatOpen(false)}
-          currentQuestion={currentQuestion}
+          currentQuestion={question}
           sessionId={sessionId}
         />
       )}

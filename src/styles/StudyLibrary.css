@@ -5,18 +5,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 800px;
-  padding: 2rem;
-  border-radius: var(--radius-lg);
-  background-color: white;
-  box-shadow: var(--shadow-lg);
-}
-
-.library-view h1 {
-  color: var(--primary);
-  text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
+  max-width: 950px;
+  margin: 0 auto;
 }
 
 /* Action Sections */
@@ -24,26 +14,28 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  margin-top: 1rem;
 }
 
 /* Common Button Styles for Actions */
 .create-button {
   font-weight: 600;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 0.8rem 1.5rem;
+  padding: 0.9rem 1.8rem;
   font-size: 1rem;
   background-color: var(--primary);
   color: white;
-  box-shadow: var(--shadow-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .create-button:hover {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Empty State Messages */
@@ -52,6 +44,10 @@
   padding: 2rem;
   color: var(--text-light);
   font-size: 1.1rem;
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
 }
 
 /* Lists and Cards */
@@ -65,43 +61,46 @@
 .study-set-card {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1.8rem;
   border-radius: var(--radius-default);
-  background-color: var(--primary-lightest);
-  box-shadow: var(--shadow-sm);
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: all 0.3s;
-  border: 1px solid rgb(148, 147, 162);
+  border: 1px solid #eaeaea;
 }
 
 .study-set-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .study-set-info {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
 }
 
 .study-set-info h3 {
   color: var(--text);
-  margin-bottom: 0.5rem;
-  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .description {
   color: var(--text-muted);
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* Progress Bars */
 .progress-container {
   position: relative;
-  height: 24px;
-  background-color: var(--primary-lighter);
-  border-radius: var(--radius-lg);
+  height: 26px;
+  background-color: #eef1ff;
+  border-radius: 50px;
   overflow: hidden;
   margin-top: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .progress-bar {
@@ -109,7 +108,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  background-color: var(--primary-light);
+  background: linear-gradient(90deg, var(--primary-light), var(--primary));
   transition: width 0.5s ease;
 }
 
@@ -119,26 +118,27 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--text);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   white-space: nowrap;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
 }
 
 /* Card Actions */
 .study-set-actions {
   display: flex;
-  gap: 0.8rem;
-  margin-top: 0.5rem;
+  gap: 1rem;
+  margin-top: 0.8rem;
 }
 
 .study-set-actions button {
-  padding: 0.7rem;
-  font-size: 0.9rem;
+  padding: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: var(--primary-lighter);
+  background-color: #eef1ff;
   color: var(--primary);
   flex: 1;
   border-radius: var(--radius-md);
@@ -146,6 +146,9 @@
 
 .study-set-actions button:hover {
   background-color: var(--primary-light);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .study-set-actions .delete-button {
@@ -154,5 +157,24 @@
 }
 
 .study-set-actions .delete-button:hover {
-  background-color: #ffcdd2;
+  background-color: var(--error);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .library-view {
+    padding: 0;
+  }
+
+  .study-set-card {
+    padding: 1.2rem;
+  }
+
+  .study-set-actions {
+    flex-wrap: wrap;
+  }
+
+  .study-set-actions button {
+    flex: 1 1 calc(50% - 0.5rem);
+  }
 }

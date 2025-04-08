@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import Header from "./Header";
 import CreateStudySetModal from "./CreateStudySetModal";
 import "../styles/StudyLibrary.css";
 
 const StudyLibrary = ({
   studySets,
-  startStudy,
-  browseStudySet,
-  resetStudySetProgress,
-  deleteStudySet,
-  addStudySet,
+  onStartStudy,
+  onBrowseStudySet,
+  onResetProgress,
+  onDeleteStudySet,
+  onAddStudySet,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,19 +26,18 @@ const StudyLibrary = ({
       })),
     };
 
-    addStudySet(newStudySet);
+    onAddStudySet(newStudySet);
   };
 
   return (
     <div className="library-view">
-      <Header currentView="library" title="StudyBuddy" />
-
+      <div className="spacer" style={{ height: "90px" }}></div>
       <div className="library-actions">
         <button className="create-button" onClick={() => setIsModalOpen(true)}>
           Create Study Set
         </button>
       </div>
-
+      <div className="spacer" style={{ height: "10px" }}></div>
       {studySets.length === 0 ? (
         <div className="no-sets">
           <p>You don't have any study sets yet. Create one to get started!</p>
@@ -73,16 +71,18 @@ const StudyLibrary = ({
                   </div>
                 </div>
                 <div className="study-set-actions">
-                  <button onClick={() => startStudy(studySet.id)}>Study</button>
-                  <button onClick={() => browseStudySet(studySet.id)}>
+                  <button onClick={() => onStartStudy(studySet.id)}>
+                    Study
+                  </button>
+                  <button onClick={() => onBrowseStudySet(studySet.id)}>
                     Browse
                   </button>
-                  <button onClick={() => resetStudySetProgress(studySet.id)}>
+                  <button onClick={() => onResetProgress(studySet.id)}>
                     Reset
                   </button>
                   <button
                     className="delete-button"
-                    onClick={() => deleteStudySet(studySet.id)}
+                    onClick={() => onDeleteStudySet(studySet.id)}
                   >
                     Delete
                   </button>

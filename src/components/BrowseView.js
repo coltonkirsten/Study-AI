@@ -1,65 +1,31 @@
 import React from "react";
-import Header from "./Header";
 import "../styles/BrowseView.css";
 
-const BrowseView = ({
-  activeStudySet,
-  browseQuestions,
-  setBrowseQuestions,
-  updateQuestionStatus,
-  goBack,
-}) => {
-  if (!activeStudySet) return <div>Study set not found</div>;
+const BrowseView = ({ questions, onUpdateStatus }) => {
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="browse-view">
+        <div className="no-questions">
+          <p>No questions to display.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const totalQuestions = questions.length;
+  const learnedQuestions = questions.filter((q) => q.learned).length;
+  const remainingQuestions = totalQuestions - learnedQuestions;
 
   return (
     <div className="browse-view">
-      <Header
-        currentView="browse"
-        goBack={goBack}
-        title={activeStudySet.name}
-      />
-
       <div className="browse-stats">
-        <p>Total Questions: {activeStudySet.questions.length}</p>
-        <p>
-          Learned: {activeStudySet.questions.filter((q) => q.learned).length}
-        </p>
-        <p>
-          Remaining: {activeStudySet.questions.filter((q) => !q.learned).length}
-        </p>
-      </div>
-
-      <div className="question-filters">
-        <button
-          className="filter-button all-button"
-          onClick={() => setBrowseQuestions(activeStudySet.questions)}
-        >
-          All
-        </button>
-        <button
-          className="filter-button learned-button"
-          onClick={() =>
-            setBrowseQuestions(
-              activeStudySet.questions.filter((q) => q.learned)
-            )
-          }
-        >
-          Learned
-        </button>
-        <button
-          className="filter-button remaining-button"
-          onClick={() =>
-            setBrowseQuestions(
-              activeStudySet.questions.filter((q) => !q.learned)
-            )
-          }
-        >
-          Remaining
-        </button>
+        <p>Total Questions: {totalQuestions}</p>
+        <p>Learned: {learnedQuestions}</p>
+        <p>Remaining: {remainingQuestions}</p>
       </div>
 
       <div className="questions-list">
-        {browseQuestions.map((question) => (
+        {questions.map((question) => (
           <div
             className={`question-card ${
               question.learned ? "learned" : "not-learned"
@@ -98,8 +64,8 @@ const BrowseView = ({
                                 ? "correct-option"
                                 : ""
                               : option === question.correctAnswer
-                              ? "correct-option"
-                              : ""
+                                ? "correct-option"
+                                : ""
                           }
                         >
                           {option}{" "}
@@ -108,8 +74,8 @@ const BrowseView = ({
                               ? " (correct)"
                               : ""
                             : option === question.correctAnswer
-                            ? " (correct)"
-                            : ""}
+                              ? " (correct)"
+                              : ""}
                         </li>
                       ))}
                     </ul>
@@ -119,24 +85,17 @@ const BrowseView = ({
             </div>
             <div className="question-status">
               {question.learned ? (
-                <button
-                  onClick={() => updateQuestionStatus(question.id, false)}
-                >
+                <button onClick={() => onUpdateStatus(question.id, false)}>
                   Mark as Not Learned
                 </button>
               ) : (
-                <button onClick={() => updateQuestionStatus(question.id, true)}>
+                <button onClick={() => onUpdateStatus(question.id, true)}>
                   Mark as Learned
                 </button>
               )}
             </div>
           </div>
         ))}
-        {browseQuestions.length === 0 && (
-          <div className="no-questions">
-            <p>No questions match the current filter.</p>
-          </div>
-        )}
       </div>
     </div>
   );

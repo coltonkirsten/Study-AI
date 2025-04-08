@@ -708,7 +708,7 @@ const AiChatModal = ({
     <div className="ai-chat-modal-overlay">
       <div className="ai-chat-modal">
         <div className="ai-chat-header">
-          <h3>Studdy Buddy {isInFeedbackMode ? "Feedback" : ""}</h3>
+          <h3>StuddyBuddy {isInFeedbackMode ? "" : ""}</h3>
           <button className="close-button" onClick={onClose}>
             &times;
           </button>

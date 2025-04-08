@@ -3,63 +3,27 @@
 
 /* Study View Styles */
 .study-view {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  padding-top: 1rem;
   position: relative;
 }
 
 .question-card-container {
   width: 100%;
-  max-width: 600px;
-  min-width: 320px;
-  margin: 3rem auto;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
   transition: all 0.4s ease-out;
 }
 
-/* When AI chat is open, adjust the question card position */
-.ai-chat-open .question-card-container {
-  transform: translateX(-1%);
-  max-width: 500px;
-  min-width: 320px;
-  margin-right: auto;
-  margin-left: 5%;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 1024px) {
-  .ai-chat-open .question-card-container {
-    transform: translateX(-25%);
-  }
-}
-
-@media (max-width: 768px) {
-  .ai-chat-open .question-card-container {
-    transform: translateX(-15%);
-    margin-left: 2%;
-  }
-}
-
-/* Phone screens - don't move question card */
-@media (max-width: 576px) {
-  .ai-chat-open .question-card-container {
-    transform: none;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 90%;
-  }
-}
-
 .question-card-main {
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  border-radius: var(--radius-lg);
   background-color: white;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgb(148, 147, 162);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .question {
@@ -332,4 +296,36 @@
   background-color: var(--primary-lighter);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* When AI chat is open, adjust the question card position */
+.ai-chat-open .question-card-container {
+  transform: translateX(-10%);
+  max-width: 600px;
+  margin-right: auto;
+  margin-left: 5%;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1024px) {
+  .ai-chat-open .question-card-container {
+    transform: translateX(-15%);
+  }
+}
+
+@media (max-width: 768px) {
+  .ai-chat-open .question-card-container {
+    transform: translateX(-5%);
+    margin-left: 2%;
+  }
+}
+
+/* Phone screens - don't move question card */
+@media (max-width: 576px) {
+  .ai-chat-open .question-card-container {
+    transform: none;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 90%;
+  }
 }

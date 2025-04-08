@@ -4,71 +4,112 @@ import StudyLibrary from "./components/StudyLibrary";
 import StudyView from "./components/StudyView";
 import ResultView from "./components/ResultView";
 import BrowseView from "./components/BrowseView";
+import Header from "./components/Header";
+import LandingPage from "./components/LandingPage";
+import { AuthProvider } from "./utils/AuthContext";
+import Authentication from "./components/Authentication";
+import { useAuth } from "./utils/AuthContext";
 
-function App() {
+// Main App wrapper with authentication
+function AppWithAuth() {
+  return (
+    <AuthProvider>
+      <Authentication>
+        <AppContent />
+      </Authentication>
+    </AuthProvider>
+  );
+}
+
+// Main App content
+function AppContent({ user, signOut, showAuthenticator, isAuthenticated }) {
   // Main data structure for study sets
   const [studySets, setStudySets] = useState([]);
   const [activeStudySetId, setActiveStudySetId] = useState(null);
-  const [currentView, setCurrentView] = useState("library"); // 'library', 'study', 'result', 'browse'
+  const [currentView, setCurrentView] = useState("landing"); // 'landing', 'library', 'study', 'result', 'browse'
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
-  const [selectedOptions, setSelectedOptions] = useState([]); // New state for multiple selections
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
   const [remainingQuestions, setRemainingQuestions] = useState([]);
   const [browseQuestions, setBrowseQuestions] = useState([]);
 
   // Load study sets from localStorage on initial load
   useEffect(() => {
-    const loadStudySets = () => {
-      try {
-        const savedStudySets = localStorage.getItem("studySets");
-        if (savedStudySets) {
-          setStudySets(JSON.parse(savedStudySets));
-        } else {
-          // If no saved study sets, load the default one as a sample
-          fetchDefaultStudySet();
-        }
-      } catch (error) {
-        console.error("Error loading study sets:", error);
+    // Check if user is authenticated
+    if (isAuthenticated) {
+      console.log("User authenticated:", user);
+      if (currentView === "landing") {
+        console.log("Changing view from landing to library");
+        setCurrentView("library");
+      }
+      loadStudySets();
+    } else {
+      console.log("User not authenticated, setting landing view");
+      setCurrentView("landing");
+    }
+  }, [isAuthenticated, user]); // Add user as a dependency to detect changes
+
+  const loadStudySets = () => {
+    try {
+      const savedStudySets = localStorage.getItem("studySets");
+      if (savedStudySets) {
+        setStudySets(JSON.parse(savedStudySets));
+      } else {
+        // If no saved study sets, load the default one as a sample
         fetchDefaultStudySet();
       }
-    };
+    } catch (error) {
+      console.error("Error loading study sets:", error);
+      fetchDefaultStudySet();
+    }
+  };
 
-    const fetchDefaultStudySet = async () => {
-      try {
-        const response = await fetch("/studyset.json");
-        const data = await response.json();
+  const fetchDefaultStudySet = async () => {
+    try {
+      const response = await fetch("/studyset.json");
+      const data = await response.json();
 
-        // Create a new study set structure
-        const newStudySet = {
-          id: "default",
-          name: "Sample Study Set",
-          description: "A sample study set with various questions",
-          dateCreated: new Date().toISOString(),
-          questions: data.questions.map((q) => ({
-            ...q,
-            learned: false,
-          })),
-        };
+      // Create a new study set structure
+      const newStudySet = {
+        id: "default",
+        name: "Sample Study Set",
+        description: "A sample study set with various questions",
+        dateCreated: new Date().toISOString(),
+        questions: data.questions.map((q) => ({
+          ...q,
+          learned: false,
+        })),
+      };
 
-        setStudySets([newStudySet]);
-        // Save to localStorage
-        localStorage.setItem("studySets", JSON.stringify([newStudySet]));
-      } catch (error) {
-        console.error("Error fetching default study set:", error);
-      }
-    };
-
-    loadStudySets();
-  }, []);
+      setStudySets([newStudySet]);
+      // Save to localStorage
+      localStorage.setItem("studySets", JSON.stringify([newStudySet]));
+    } catch (error) {
+      console.error("Error fetching default study set:", error);
+    }
+  };
 
   // Save study sets to localStorage whenever they change
   useEffect(() => {
-    if (studySets.length > 0) {
+    if (studySets.length > 0 && isAuthenticated) {
       localStorage.setItem("studySets", JSON.stringify(studySets));
     }
-  }, [studySets]);
+  }, [studySets, isAuthenticated]);
+
+  // Handle sign in - now using Amplify authentication
+  const handleSignIn = () => {
+    // The view change is handled by the useEffect observing isAuthenticated
+  };
+
+  // Handle sign out - now using Amplify authentication
+  const handleSignOut = () => {
+    if (signOut) {
+      signOut();
+    }
+    setCurrentView("landing");
+  };
 
   // Function to start studying a specific study set
   const startStudy = (studySetId) => {
@@ -223,13 +264,13 @@ function App() {
     setCurrentView("browse");
   };
 
-  // Add a new study set (from AI generation or file upload)
+  // Function to add a new study set
   const addStudySet = (newStudySet) => {
     setStudySets((prevStudySets) => [...prevStudySets, newStudySet]);
     alert(`Study set "${newStudySet.name}" has been successfully added!`);
   };
 
-  // Function to reset a study set's progress
+  // Function to reset progress for a study set
   const resetStudySetProgress = (studySetId) => {
     const updatedStudySets = studySets.map((studySet) => {
       if (studySet.id === studySetId) {
@@ -256,7 +297,7 @@ function App() {
     }
   };
 
-  // Function to update a question's learned status in the browse view
+  // Function to update question status
   const updateQuestionStatus = (questionId, isLearned) => {
     const updatedStudySets = studySets.map((studySet) => {
       if (studySet.id === activeStudySetId) {
@@ -283,74 +324,101 @@ function App() {
     );
   };
 
-  // Handle navigation back based on current view
+  // Function to handle going back from different views
   const handleGoBack = () => {
-    if (
-      currentView === "study" ||
-      currentView === "browse" ||
-      currentView === "result"
-    ) {
+    if (currentView === "study" || currentView === "browse") {
       setCurrentView("library");
+    } else if (currentView === "result") {
+      setCurrentView("study");
     }
   };
 
-  // Get the active study set
-  const activeStudySet = studySets.find((set) => set.id === activeStudySetId);
+  // Render different views based on currentView state
+  const renderView = () => {
+    switch (currentView) {
+      case "landing":
+        return (
+          <LandingPage
+            onSignIn={handleSignIn}
+            showAuthenticator={showAuthenticator}
+            isAuthenticated={isAuthenticated}
+          />
+        );
+      case "library":
+        return (
+          <StudyLibrary
+            studySets={studySets}
+            onStartStudy={startStudy}
+            onBrowseStudySet={browseStudySet}
+            onAddStudySet={addStudySet}
+            onResetProgress={resetStudySetProgress}
+            onDeleteStudySet={deleteStudySet}
+          />
+        );
+      case "study":
+        return (
+          <StudyView
+            question={currentQuestion}
+            userAnswer={userAnswer}
+            selectedOption={selectedOption}
+            selectedOptions={selectedOptions}
+            onAnswer={setUserAnswer}
+            onSelectOption={setSelectedOption}
+            onSelectOptions={setSelectedOptions}
+            onCheckAnswer={checkAnswer}
+          />
+        );
+      case "result":
+        return (
+          <ResultView
+            question={currentQuestion}
+            userAnswer={userAnswer}
+            selectedOption={selectedOption}
+            selectedOptions={selectedOptions}
+            isCorrect={isCorrect}
+            onMarkLearned={markAsLearned}
+            onStudyAgain={studyAgain}
+          />
+        );
+      case "browse":
+        return (
+          <BrowseView
+            questions={browseQuestions}
+            onUpdateStatus={updateQuestionStatus}
+          />
+        );
+      default:
+        return (
+          <LandingPage
+            onSignIn={handleSignIn}
+            showAuthenticator={showAuthenticator}
+            isAuthenticated={isAuthenticated}
+          />
+        );
+    }
+  };
 
-  // Render the appropriate view based on the current state
   return (
-    <div className="App">
-      {currentView === "library" && (
-        <StudyLibrary
-          studySets={studySets}
-          startStudy={startStudy}
-          browseStudySet={browseStudySet}
-          resetStudySetProgress={resetStudySetProgress}
-          deleteStudySet={deleteStudySet}
-          addStudySet={addStudySet}
-        />
-      )}
-
-      {currentView === "study" && (
-        <StudyView
-          currentQuestion={currentQuestion}
-          userAnswer={userAnswer}
-          setUserAnswer={setUserAnswer}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          selectedOptions={selectedOptions}
-          setSelectedOptions={setSelectedOptions}
-          checkAnswer={checkAnswer}
+    <div className="app">
+      {currentView !== "landing" ? (
+        <Header
+          currentView={currentView}
           goBack={handleGoBack}
-          activeStudySet={activeStudySet}
+          title={
+            currentView === "library"
+              ? "Your Study Sets"
+              : currentView === "browse"
+                ? "Browse Questions"
+                : ""
+          }
+          isAuthenticated={isAuthenticated}
+          signOut={handleSignOut}
+          user={user}
         />
-      )}
-
-      {currentView === "result" && (
-        <ResultView
-          currentQuestion={currentQuestion}
-          userAnswer={userAnswer}
-          selectedOption={selectedOption}
-          selectedOptions={selectedOptions}
-          isCorrect={isCorrect}
-          studyAgain={studyAgain}
-          markAsLearned={markAsLearned}
-          goBack={handleGoBack}
-          activeStudySet={activeStudySet}
-        />
-      )}
-
-      {currentView === "browse" && (
-        <BrowseView
-          activeStudySet={activeStudySet}
-          browseQuestions={browseQuestions}
-          setBrowseQuestions={setBrowseQuestions}
-          updateQuestionStatus={updateQuestionStatus}
-          goBack={handleGoBack}
-        />
-      )}
+      ) : null}
+      <div className="app-content">{renderView()}</div>
     </div>
   );
 }
 
-export default App;
+export default AppWithAuth;

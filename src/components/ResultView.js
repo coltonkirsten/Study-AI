@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
-import TopMenuBar from "./TopMenuBar";
 import AiChatModal from "./AiChatModal";
 import "../styles/study.css";
 import { v4 as uuidv4 } from "uuid";
 
 const ResultView = ({
-  currentQuestion,
+  question,
   userAnswer,
   selectedOption,
   selectedOptions,
   isCorrect,
-  studyAgain,
-  markAsLearned,
-  goBack,
-  activeStudySet,
+  onStudyAgain,
+  onMarkLearned,
 }) => {
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
 
@@ -24,32 +21,33 @@ const ResultView = ({
 
   // Reset the session ID whenever the question changes
   useEffect(() => {
-    if (currentQuestion) {
+    if (question) {
       setSessionId(uuidv4());
     }
-  }, [currentQuestion]);
+  }, [question]);
 
-  const studySetName = activeStudySet ? activeStudySet.name : "";
+  // Listen for global AI chat events
+  useEffect(() => {
+    const handleAiChatEvent = () => {
+      setIsAiChatOpen(true);
+    };
 
-  const handleAskAI = () => {
-    setIsAiChatOpen(true);
-  };
+    window.addEventListener("openAiChat", handleAiChatEvent);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("openAiChat", handleAiChatEvent);
+    };
+  }, []);
 
   // Check if the question allowed multiple answers
-  const isMultiSelect = Array.isArray(currentQuestion.correctAnswer);
+  const isMultiSelect = Array.isArray(question.correctAnswer);
 
   return (
     <div className={`study-view ${isAiChatOpen ? "ai-chat-open" : ""}`}>
-      <TopMenuBar
-        title={studySetName}
-        goBack={goBack}
-        onAskAI={handleAskAI}
-        isResultView={true}
-      />
-
       <div className="question-card-container">
         <div className="question-card-main">
-          {currentQuestion.type === "multipleChoice" ? (
+          {question.type === "multipleChoice" ? (
             <p className="question">
               {isCorrect ? "✓ Correct!" : "✗ Incorrect"}
             </p>
@@ -59,10 +57,10 @@ const ResultView = ({
 
           <div className="answer-section">
             <h3>Question:</h3>
-            <p>{currentQuestion.question}</p>
+            <p>{question.question}</p>
 
             <h3>Your Answer:</h3>
-            {currentQuestion.type === "freeResponse" ? (
+            {question.type === "freeResponse" ? (
               <p>{userAnswer}</p>
             ) : isMultiSelect ? (
               <ul className="answer-list">
@@ -79,24 +77,24 @@ const ResultView = ({
             )}
 
             <h3>Correct Answer:</h3>
-            {currentQuestion.type === "freeResponse" ? (
-              <p>{currentQuestion.answer}</p>
+            {question.type === "freeResponse" ? (
+              <p>{question.answer}</p>
             ) : isMultiSelect ? (
               <ul className="answer-list correct">
-                {currentQuestion.correctAnswer.map((option, index) => (
+                {question.correctAnswer.map((option, index) => (
                   <li key={index}>{option}</li>
                 ))}
               </ul>
             ) : (
-              <p>{currentQuestion.correctAnswer}</p>
+              <p>{question.correctAnswer}</p>
             )}
           </div>
 
           <div className="buttons">
-            <button className="study-again-button" onClick={studyAgain}>
+            <button className="study-again-button" onClick={onStudyAgain}>
               Study Again
             </button>
-            <button className="got-it-button" onClick={markAsLearned}>
+            <button className="got-it-button" onClick={onMarkLearned}>
               Got It!
             </button>
           </div>
@@ -107,13 +105,13 @@ const ResultView = ({
         <AiChatModal
           isOpen={isAiChatOpen}
           onClose={() => setIsAiChatOpen(false)}
-          currentQuestion={currentQuestion}
+          currentQuestion={question}
           userAnswer={
-            currentQuestion.type === "freeResponse"
+            question.type === "freeResponse"
               ? userAnswer
               : isMultiSelect
-              ? selectedOptions.join(", ")
-              : selectedOption
+                ? selectedOptions.join(", ")
+                : selectedOption
           }
           isInFeedbackMode={true}
           sessionId={sessionId}
